@@ -1,2 +1,44 @@
 # Godot-File-Picker
- 
+
+An Android plugin for Godot 3.5+ that allow you to open the native file dialog and choose a file. This file will be copied to `user://_temp/original_file_name`. After you are finished, you have to delete the temporary file yourself.
+
+# API Reference
+
+## Functions
+> **Note**
+> Arguments cannot be `null`.
+```gdscript
+openFilePicker(mimeType: String) -> void
+```
+## Signals
+```gdscript
+file_picked(String temp_path, String mime_type)
+```
+
+
+# Usage
+```gdscript
+var android_picker
+
+
+func _ready() -> void:
+    if Engine.has_singleton("GodotFilePicker"):
+		android_picker = Engine.get_singleton("GodotFilePicker")
+		android_picker.connect("file_picked", self, "file_picked")
+
+
+func _on_Button_pressed() -> void:
+    # Call the file picker (with the specified type)
+    android_picker.openFilePicker("*/*")
+
+
+func file_picked(path: String, mime_type: String) -> void:
+    print("Temporary path: " + path)
+    print("Mime type: " + mime_type)
+
+    # Here you read the file or copy it to another directory
+
+    # Now you can delete the temporary file
+    var dir = Directory.new()
+    dir.remove(path)
+```
