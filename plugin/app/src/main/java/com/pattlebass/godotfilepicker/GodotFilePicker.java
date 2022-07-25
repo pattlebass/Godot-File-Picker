@@ -50,17 +50,16 @@ public class GodotFilePicker extends org.godotengine.godot.plugin.GodotPlugin {
     public Set<SignalInfo> getPluginSignals() {
         Set<SignalInfo> signals = new ArraySet<>();
 
-        signals.add(new SignalInfo("file_picked", String.class));
+        signals.add(new SignalInfo("file_picked", String.class, String.class));
         return signals;
     }
 
     @UsedByGodot
-    public String openFilePicker() {
+    public void openFilePicker(String type) {
         Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
-        chooseFile.setType("*/*");
+        chooseFile.setType(type.isEmpty() ? "*/*" : type);
         chooseFile = Intent.createChooser(chooseFile, "Choose a project");
         activity.startActivityForResult(chooseFile, OPEN_FILE);
-        return "";
     }
 
     @Override
@@ -73,8 +72,8 @@ public class GodotFilePicker extends org.godotengine.godot.plugin.GodotPlugin {
                 uri = resultData.getData();
                 Log.d(TAG, "Picked file with URI: " + uri.getPath());
                 try {
-                    //Log.d(TAG, getFile(context, uri).getPath());
-                    emitSignal("file_picked", getFile(context, uri).getPath());
+                    emitSignal("file_picked", getFile(context, uri).getPath(),
+                                contentResolver.getType(uri));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -85,7 +84,12 @@ public class GodotFilePicker extends org.godotengine.godot.plugin.GodotPlugin {
     // From https://stackoverflow.com/questions/65447194/how-to-convert-uri-to-file-android-10
 
     public static File getFile(Context context, Uri uri) throws IOException {
-        File destinationFilename = new File(context.getFilesDir().getPath() + File.separatorChar + queryName(context, uri));
+        String directoryName = context.getFilesDir().getPath() + File.separatorChar + "_temp";
+        File directory = new File(directoryName);
+        if (! directory.exists()){
+            directory.mkdir();
+        }
+        File destinationFilename = new File(directoryName + File.separatorChar + queryName(context, uri));
         try (InputStream ins = context.getContentResolver().openInputStream(uri)) {
             createFileFromStream(ins, destinationFilename);
         } catch (Exception ex) {
