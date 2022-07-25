@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.pattlebass.godotfilepicker">
+
+    <application>
+        <meta-data
+            android:name="org.godotengine.plugin.v1.GodotFilePicker"
+            android:value="com.pattlebass.godotfilepicker.GodotFilePicker" />
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:grantUriPermissions="true"
+            android:exported="false"
+            android:authorities="${applicationId}">
+
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_provider_paths"/>
+        </provider>
+    </application>
+
+</manifest>
