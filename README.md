@@ -6,7 +6,7 @@ An Android plugin for Godot 3.5+ that allow you to open the native file dialog a
 
 ## Functions
 > **Note**
-> Arguments cannot be `null`.
+> Argument cannot be `null`. [See a list of common MIME types.](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types)
 ```gdscript
 openFilePicker(mimeType: String) -> void
 ```
