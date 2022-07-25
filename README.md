@@ -23,8 +23,8 @@ var android_picker
 
 func _ready() -> void:
     if Engine.has_singleton("GodotFilePicker"):
-		android_picker = Engine.get_singleton("GodotFilePicker")
-		android_picker.connect("file_picked", self, "file_picked")
+        android_picker = Engine.get_singleton("GodotFilePicker")
+        android_picker.connect("file_picked", self, "file_picked")
 
 
 func _on_Button_pressed() -> void:
