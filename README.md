@@ -24,7 +24,7 @@ var android_picker
 func _ready() -> void:
     if Engine.has_singleton("GodotFilePicker"):
         android_picker = Engine.get_singleton("GodotFilePicker")
-        android_picker.connect("file_picked", self, "file_picked")
+        android_picker.connect("file_picked", self, "_on_file_picked")
 
 
 func _on_Button_pressed() -> void:
@@ -32,13 +32,13 @@ func _on_Button_pressed() -> void:
     android_picker.openFilePicker("*/*")
 
 
-func file_picked(path: String, mime_type: String) -> void:
-    print("Temporary path: " + path)
+func _on_file_picked(temp_path: String, mime_type: String) -> void:
+    print("Temporary path: " + temp_path)
     print("Mime type: " + mime_type)
 
     # Here you read the file or copy it to another directory
 
     # Now you can delete the temporary file
     var dir = Directory.new()
-    dir.remove(path)
+    dir.remove(temp_path)
 ```
